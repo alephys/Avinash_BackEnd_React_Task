@@ -1,0 +1,104 @@
+<!-- home.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Home Page</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Roboto', Arial, sans-serif;
+            background-color: #f5f6f5;
+        }
+        .header {
+            background-color: #4a90e2;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        .sidebar {
+            width: 250px;
+            height: calc(100vh - 60px);
+            position: fixed;
+            top: 60px;
+            left: 0;
+            background-color: #ffffff;
+            padding-top: 20px;
+            border-right: 1px solid #e0e0e0;
+            overflow-y: auto;
+        }
+        .sidebar h3 {
+            padding: 10px 20px;
+            margin: 0;
+            background-color: #f0f0f0;
+            color: #333;
+            font-size: 16px;
+        }
+        .sidebar a {
+            padding: 12px 20px;
+            display: block;
+            color: #333;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        .sidebar a:hover {
+            background-color: #f0f0f0;
+        }
+        .content {
+            margin-left: 260px;
+            padding: 20px;
+            min-height: calc(100vh - 60px);
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        .form-group {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px; /* Maintains spacing between elements */
+        }
+        .form-input {
+            padding: 12px;
+            font-size: 14px;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            width: 200px;
+        }
+        .submit-button {
+            padding: 12px 25px;
+            background-color: #4a90e2;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            border-radius: 6px;
+            transition: background-color 0.3s;
+            width: 200px; /* Match input width for consistency */
+        }
+        .submit-button:hover {
+            background-color: #357abd;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h2>Application Dashboard</h2>
+    </div>
+    <div class="sidebar">
+        <h3>Topics</h3>
+        {% for topic in topics %}
+            <a href="{% url 'topic_detail' topic_name=topic %}">{{ topic }}</a>
+        {% endfor %}
+    </div>
+    <div class="content">
+        <h2>Welcome to Home Page</h2>
+        <form method="post" action="{% url 'create_topic' %}" class="form-group">
+            {% csrf_token %}
+            <input type="text" name="topic_name" placeholder="Topic Name" class="form-input" required>
+            <input type="number" name="partitions" placeholder="Number of Partitions" class="form-input" min="1" required>
+            <button type="submit" class="submit-button">submit</button>
+        </form>
+    </div>
+</body>
+</html>
