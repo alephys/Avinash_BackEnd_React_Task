@@ -1,149 +1,40 @@
-<!-- topic_detail.html -->
-<!DOCTYPE html>
-<html>
-<head>
-    <title>{{ topic_name }} Management</title>
-    <style>
-        body {
-            margin: 0;
-            font-family: 'Roboto', Arial, sans-serif;
-            background-color: #f5f6f5;
-        }
-        .header {
-            background-color: #4a90e2;
-            color: white;
-            padding: 15px;
-            text-align: center;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-        }
-        .sidebar {
-            width: 250px;
-            height: calc(100vh - 60px);
-            position: fixed;
-            top: 60px;
-            left: 0;
-            background-color: #ffffff;
-            padding-top: 20px;
-            border-right: 1px solid #e0e0e0;
-            overflow-y: auto;
-        }
-        .sidebar h3 {
-            padding: 10px 20px;
-            margin: 0;
-            background-color: #f0f0f0;
-            color: #333;
-            font-size: 16px;
-        }
-        .sidebar a {
-            padding: 12px 20px;
-            display: block;
-            color: #333;
-            text-decoration: none;
-            font-size: 14px;
-        }
-        .sidebar a:hover {
-            background-color: #f0f0f0;
-        }
-        .content {
-            margin-left: 260px;
-            padding: 20px;
-            min-height: calc(100vh - 60px);
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-            position: relative;
-        }
-        .button-group {
-            margin-top: 20px;
-            display: flex;
-            gap: 10px;
-        }
-        .button {
-            padding: 12px 25px;
-            background-color: #4a90e2;
-            color: white;
-            border: none;
-            cursor: pointer;
-            font-size: 14px;
-            border-radius: 6px;
-            transition: background-color 0.3s;
-        }
-        .button:hover {
-            background-color: #357abd;
-        }
-        .delete-button {
-            background-color: #d9534f;
-        }
-        .delete-button:hover {
-            background-color: #c9302c;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-        th, td {
-            padding: 12px;
-            text-align: left;
-            border-bottom: 1px solid #e0e0e0;
-        }
-        th {
-            background-color: #f0f0f0;
-            color: #333;
-        }
-        .add-topic-button {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            padding: 12px 25px;
-            background-color: #4a90e2;
-            color: white;
-            border: none;
-            cursor: pointer;
-            font-size: 14px;
-            border-radius: 6px;
-            transition: background-color 0.3s;
-        }
-        .add-topic-button:hover {
-            background-color: #357abd;
-        }
-    </style>
-</head>
-<body>
-    <div class="header">
-        <h2>Application Dashboard</h2>
-    </div>
-    <div class="sidebar">
-        <h3>Topics</h3>
-        {% for topic in topics %}
-            <a href="{% url 'topic_detail' topic_name=topic %}">{{ topic }}</a>
-        {% endfor %}
-    </div>
-    <div class="content">
-        <h2>Topics {{ topic_name }}</h2>
-        <a href="{% url 'home' %}" class="add-topic-button">Add Topic</a>
-        <table>
-            <tr>
-                <th>Topic Name</th>
-                <th>Status</th>
-                <th>Partitions</th>
-                <th>Production</th>
-                <th>Consumption</th>
-                <th>Followers</th>
-                <th>Observers</th>
-                <th>Last Produced</th>
-            </tr>
-            <tr>
-                <td>{{ topic_name }}</td>
-                <td>Active</td>
-                <td>3</td>
-                <td>100 msg/s</td>
-                <td>95 msg/s</td>
-                <td>5</td>
-                <td>2</td>
-                <td>2025-09-02 17:00 IST</td>
-            </tr>
-        </table>
-    </div>
-</body>
-</html>
+{% extends "base.html" %}
+{% block content %}
+  <div>
+    <h2>Topic Details</h2>
+    {% if topic %}
+      <div style="font-family: Roboto, sans-serif; border: 1px solid #ccc; padding: 20px; border-radius: 8px; background-color: #f9f9f9;">
+        <p><strong>Topic Name:</strong> {{ topic.name }}</p>
+        <p><strong>Status:</strong> {% if topic.is_active %}Active{% else %}Inactive{% endif %}</p>
+        <p><strong>Partitions:</strong> {{ topic.partitions }}</p>
+        <p><strong>Production:</strong> {{ topic.production }}</p>
+        <p><strong>Consumption:</strong> {{ topic.consumption }}</p>
+        <p><strong>Followers:</strong> {{ topic.followers }}</p>
+        <p><strong>Observers:</strong> {{ topic.observers }}</p>
+        <p><strong>Last Produced:</strong> {% if topic.last_produced %}{{ topic.last_produced|date:"Y-m-d H:i:s" }}{% else %}N/A{% endif %}</p>
+        {% if request_id %}
+          <a href="{% url 'create_topic_form' request_id %}?highlight={{ topic.name|urlencode }}">
+            <button style="background-color: #4CAF50; color: white; border: none; padding: 10px 20px; font-family: Roboto, sans-serif; cursor: pointer; border-radius: 4px;">
+              Back to Create Topic
+            </button>
+          </a>
+        {% endif %}
+        <a href="{% url 'home' %}">
+          <button style="background-color: #4CAF50; color: white; border: none; padding: 10px 20px; font-family: Roboto, sans-serif; cursor: pointer; border-radius: 4px;">
+            Back to Home
+          </button>
+        </a>
+      </div>
+    {% else %}
+      <p style="color: red; font-family: Roboto, sans-serif;">Topic not found.</p>
+      <a href="{% url 'home' %}">
+        <button style="background-color: #4CAF50; color: white; border: none; padding: 10px 20px; font-family: Roboto, sans-serif; cursor: pointer; border-radius: 4px;">
+          Back to Home
+        </button>
+      </a>
+    {% endif %}
+  </div>
+{% endblock %}
+{% block sidebar %}
+  {{ block.super }}
+{% endblock %}
