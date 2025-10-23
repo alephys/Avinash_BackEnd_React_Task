@@ -9,6 +9,7 @@ import ldap
 from django_auth_ldap.config import LDAPSearch, GroupOfNamesType
 import logging
 
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = 'django-insecure-4z)z9zy!7fe^ef!p4pumaeq07g1q)v!@6ss4alf3e$xbm^l2hu'

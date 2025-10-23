@@ -616,6 +616,28 @@ def topic_detail(request, topic_name):
 def execute_confluent_command(command, topic_name=None, partitions=None):
     return False, "This is a placeholder function for confluent command"
 
+
+@csrf_exempt
+def topic_detail_api(request, topic_name):
+    try:
+        topic = Topic.objects.get(name=topic_name, is_active=True)
+        data = {
+            "id": topic.id,
+            "name": topic.name,
+            "partitions": topic.partitions,
+            "created_by": topic.created_by.username,
+            "production": topic.production,
+            "consumption": topic.consumption,
+            "followers": topic.followers,
+            "observers": topic.observers,
+            "last_produced": topic.last_produced,
+        }
+        return JsonResponse({"success": True, "topic": data})
+    except Topic.DoesNotExist:
+        return JsonResponse({"success": False, "message": "Topic not found"}, status=404)
+
+
+
 @login_required
 def create_partition(request, topic_name):
     if not request.user.is_authenticated:

@@ -8,6 +8,7 @@ urlpatterns = [
     path('home_api/', views.home_api, name='home_api'),
     path('admin_dashboard_api/', views.admin_dashboard_api, name='admin_dashboard_api'),
     path('create_topic_api/<int:request_id>/', views.create_topic_api, name='create_topic_api'),
+    path('topic/<str:topic_name>/', views.topic_detail_api, name='topic_detail_api'),
     path('delete_topic/<int:topic_id>/', views.delete_topic_api, name='delete_topic_api'),
     
     path('admin/', admin.site.urls),
@@ -16,7 +17,6 @@ urlpatterns = [
     path('logout/', views.logout_view, name='logout'),
     path('home/', views.home, name='home'),
     path('admin_dashboard/', views.admin_dashboard, name='admin_dashboard'),
-    
     path('home/<str:topic_name>/', views.topic_detail, name='topic_detail'),
     path('create_topic/', views.create_topic, name='create_topic'),
     path('create_topic/<int:request_id>/', views.create_topic_form, name='create_topic_form'),
