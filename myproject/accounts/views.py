@@ -8,7 +8,7 @@ from django.utils import timezone
 from .models import LogEntry, LoginEntry, Topic, TopicRequest
 import logging
 import re
-from confluent_kafka.admin import AdminClient, NewTopic
+from confluent_kafka.admin import AdminClient, NewTopic, NewPartitions
 
 from django.views.decorators.csrf import csrf_exempt
 
@@ -555,6 +555,37 @@ def delete_topic_api(request, topic_id):
             return JsonResponse({"success": False, "message": "Topic not found."})
     
     return JsonResponse({"success": False, "message": "Invalid request method."})
+
+
+# alter topic 
+
+@csrf_exempt
+def alter_topic(request):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+            topic_name = data.get("topic_name")
+            new_partitions = int(data.get("partitions"))
+
+            # Connect to Kafka cluster
+            admin_client = AdminClient({"bootstrap.servers": "localhost:9092"})
+
+            # Alter topic partitions
+            admin_client.create_partitions(
+                [NewPartitions(topic_name, new_partitions)]
+            )
+
+            # Update in Django DB
+            Topic.objects.filter(name=topic_name).update(partitions=new_partitions)
+
+            return JsonResponse({"success": True, "message": "Topic updated successfully!"})
+        except Exception as e:
+            return JsonResponse({"success": False, "message": str(e)})
+
+    return JsonResponse({"success": False, "message": "Invalid request method"})
+
+
+# delete topic
 
 @login_required
 def delete_topic(request):

@@ -10,6 +10,8 @@ urlpatterns = [
     path('create_topic_api/<int:request_id>/', views.create_topic_api, name='create_topic_api'),
     path('topic/<str:topic_name>/', views.topic_detail_api, name='topic_detail_api'),
     path('delete_topic/<int:topic_id>/', views.delete_topic_api, name='delete_topic_api'),
+    path("api/alter_topic/", views.alter_topic, name="alter_topic"),
+    
     
     path('admin/', admin.site.urls),
     path('', views.login_view, name='root'),
