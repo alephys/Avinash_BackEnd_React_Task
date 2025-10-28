@@ -120,7 +120,10 @@ def home_api(request):
         print("home_api called by:", user.username)
 
         topics = Topic.objects.filter(is_active=True, created_by=user)
-        approved_requests = TopicRequest.objects.filter(requested_by=user, status="APPROVED")
+        # approved_requests = TopicRequest.objects.filter(requested_by=user, status="APPROVED")
+        # include PENDING, APPROVED, and DECLINED
+        approved_requests = TopicRequest.objects.filter(requested_by=user).exclude(status="COMPLETED")
+
 
         # Identify approved but uncreated topics
         uncreated_requests = [

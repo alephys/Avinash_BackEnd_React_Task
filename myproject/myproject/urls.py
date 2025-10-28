@@ -13,6 +13,7 @@ urlpatterns = [
     path("api/alter_topic/", views.alter_topic, name="alter_topic"),
     
     
+    
     path('admin/', admin.site.urls),
     path('', views.login_view, name='root'),
     path('login/', views.login_view, name='login'),
