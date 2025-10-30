@@ -1,0 +1,8 @@
+This should show an error immediately in the terminal.
+
+Most common causes on Oracle Linux 8:
+
+JAVA_HOME not set or not visible to Jenkins user.
+
+JENKINS_HOME directory is not writable by jenkins user.
+
